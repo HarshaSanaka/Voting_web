@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus E-Voting System</title>
+    <meta name="description" content="Secure campus e-voting platform for student council elections.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <main class="app-container">
+        <!-- Login View -->
+        <section id="login-view" class="view active">
+            <div class="glass-card">
+                <div class="card-header">
+                    <h1>Welcome Voter</h1>
+                    <p>Sign in to cast your vote for the 2026 Student Council Elections.</p>
+                </div>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="student-id">Student ID</label>
+                        <input type="text" id="student-id" placeholder="Enter your Student ID" required autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Authenticate & Continue</button>
+                </form>
+                <div class="form-footer">
+                    <p id="login-error" class="error-message"></p>
+                    <button type="button" id="btn-admin-link" class="btn btn-secondary mt-4" style="font-size: 12px; padding: 8px;">Admin Dashboard</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voting View -->
+        <section id="voting-view" class="view">
+            <div class="glass-card voting-card">
+                <div class="card-header">
+                    <h1>Presidential Candidates</h1>
+                    <p>Select one nominee to lead the Student Council.</p>
+                </div>
+                <form id="voting-form">
+                    <div class="candidates-grid" id="candidates-grid">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                    
+                    <div class="voting-actions">
+                        <button type="button" class="btn btn-secondary" id="btn-logout">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Vote</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Success View -->
+        <section id="success-view" class="view">
+            <div class="glass-card text-center">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h1>Vote Cast Successfully!</h1>
+                <p>Thank you for participating in the election. Your vote has been recorded securely and anonymously.</p>
+                <button type="button" class="btn btn-primary mt-4" id="btn-return">Return to Home</button>
+            </div>
+        </section>
+
+        <!-- Admin Login View -->
+        <section id="admin-login-view" class="view">
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="admin-badge">ADMIN</div>
+                    <h1>Dashboard Access</h1>
+                    <p>Enter your admin credentials to access the control panel.</p>
+                </div>
+                <form id="admin-login-form">
+                    <div class="input-group">
+                        <label for="admin-username">Username</label>
+                        <input type="text" id="admin-username" placeholder="Enter admin username" required autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+                <div class="form-footer">
+                    <p id="admin-login-error" class="error-message"></p>
+                    <button type="button" id="btn-admin-back" class="btn btn-secondary mt-4" style="font-size: 12px; padding: 8px;">Back to Voting</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Dashboard View -->
+        <section id="admin-view" class="view">
+            <div class="glass-card admin-dashboard-card">
+                <div class="card-header">
+                    <h1>Admin Dashboard</h1>
+                    <p>Manage elections, candidates, and monitor live results.</p>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-number" id="stat-total-votes">0</span>
+                        <span class="stat-label">Total Votes</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="stat-total-candidates">0</span>
+                        <span class="stat-label">Candidates</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="stat-total-eligible">0</span>
+                        <span class="stat-label">Eligible IDs</span>
+                    </div>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="tab-nav">
+                    <button class="tab-link active" data-tab="tab-results">Live Results</button>
+                    <button class="tab-link" data-tab="tab-candidates">Manage Nominees</button>
+                    <button class="tab-link" data-tab="tab-eligible-voters">Eligible IDs</button>
+                    <button class="tab-link" data-tab="tab-logs">Audit Logs</button>
+                </div>
+
+                <!-- Tab: Live Results -->
+                <div class="tab-content active" id="tab-results">
+                    <div id="results-list" class="results-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Tab: Manage Nominees -->
+                <div class="tab-content" id="tab-candidates">
+                    <form id="add-candidate-form" class="add-candidate-form">
+                        <div class="input-row">
+                            <input type="text" id="new-candidate-name" placeholder="Candidate Name" required>
+                            <input type="text" id="new-candidate-dept" placeholder="Department">
+                            <button type="submit" class="btn btn-primary btn-sm">Add</button>
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Votes</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="candidates-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: Eligible Voters -->
+                <div class="tab-content" id="tab-eligible-voters">
+                    <form id="add-eligible-voter-form" class="add-candidate-form">
+                        <div class="input-row">
+                            <input type="text" id="new-eligible-student-id" placeholder="Student ID" required>
+                            <button type="submit" class="btn btn-primary btn-sm">Enable</button>
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student ID</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eligible-voters-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: Audit Logs -->
+                <div class="tab-content" id="tab-logs">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Vote ID</th>
+                                    <th>Student ID</th>
+                                    <th>Candidate</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Dashboard Actions -->
+                <div class="dashboard-actions">
+                    <button type="button" class="btn btn-secondary" id="btn-refresh-dashboard">Refresh Data</button>
+                    <button type="button" class="btn btn-primary" id="btn-admin-close">Logout</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
